@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+
+    # PHP service
+    test_php_service:
+        build: .
+        container_name: test-php-service
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        networks:
+            - default
+            - ps_shared_private_network
+
+
+    # Nginx service
+    test_nginx:
+        image: nginx:alpine
+        container_name: test-nginx
+        ports:
+            - 8888:80
+        volumes:
+            - .:/var/www
+            - ./Docker/nginx/conf.d/:/etc/nginx/conf.d/
+            
+
+networks:
+  ps_shared_private_network:
+    external:
+      name: ps_shared_private_network
